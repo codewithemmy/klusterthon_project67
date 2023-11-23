@@ -14,11 +14,10 @@ const { AdminRepository } = require("../admin/admin.repository")
 
 class AuthService {
   static async verifyUser(body) {
-    const { otp, email } = body
+    const { otp } = body
 
     const confirmOtp = await UserRepository.findSingleUserWithParams({
       verificationOtp: otp,
-      email,
     })
 
     if (!confirmOtp) return { success: false, msg: AuthFailure.VERIFY_OTP }
