@@ -1,4 +1,4 @@
-module.exports.providerMessages = {
+const providerMessages = {
   USER_VALIDATION_ERROR: "Unable to verify user details",
   USER_VALIDATION_SUCCESS: "Successfully validated bank account",
   CREDIT_HISTORY_ERROR: "Unable to fetch credit history details",
@@ -11,3 +11,5 @@ module.exports.providerMessages = {
   INITIATE_PAYMENT_SUCCESS: "Successfully initiated payment",
   INITIATE_PAYMENT_FAILURE: "Unable to initiate payment",
 }
+
+module.exports = { providerMessages }
