@@ -52,72 +52,33 @@ class TransactionService {
 
     return paymentDetails
   }
+
+  static async verifyPayment(payload) {
+    const { status, amount, transactionId, email, invoiceId } = payload
+    const findTransaction = await TransactionRepository.findOneTransaction({
+      amount,
+      transactionId,
+    })
+
+    if (!findTransaction)
+      return { success: false, msg: `unable to find transaction` }
+
+    const transaction = await TransactionRepository.updateTransactionDetails(
+      {
+        _id: new mongoose.Types.ObjectId(findTransaction._id),
+      },
+      { status }
+    )
+    if (!transaction)
+      return { success: false, msg: `unable to find transaction` }
+
+    await InvoiceRepository.updateInvoiceDetails(
+      { email, invoiceId },
+      { status: "paid" }
+    )
+
+    return { success: true, msg: `Transaction Successfully Verified` }
+  }
 }
 
 module.exports = { TransactionService }
-
-// export default class TransactionService {
-//   private static paymentProvider: IPaymentProvider
-
-//   static async getConfig() {
-//     this.paymentProvider = new StripePaymentService()
-//   }
-
-//   static async initiatePayment(payload: {
-//     amount: number
-//     currency: string
-//   }): Promise<IResponse> {
-//     await this.getConfig()
-//     const { amount, currency } = payload
-//     const initializePayment = await this.paymentProvider.initiatePaymentIntent({
-//       amount,
-//       currency,
-//     })
-
-//     if (!initializePayment)
-//       return {
-//         success: false,
-//         msg: transactionMessages.CREATE_TRANSACTION_FAILURE,
-//       }
-
-//     return initializePayment
-//   }
-
-//   static async verifyPayment(
-//     payload: Partial<ITransaction>,
-//     locals: any,
-//   ): Promise<IResponse> {
-//     const order = await OrderRepository.fetchOrder(
-//       { _id: new mongoose.Types.ObjectId(payload.orderId) },
-//       {},
-//     )
-//     if (!order)
-//       return { success: false, msg: transactionMessages.PAYMENT_FAILURE }
-
-//     if (order.totalAmount !== payload.amount)
-//       return { success: false, msg: transactionMessages.PAYMENT_FAILURE }
-
-//     const transaction = await TransactionRepository.create({
-//       userId: new mongoose.Types.ObjectId(locals),
-//       vendorId: new mongoose.Types.ObjectId(order.vendorId),
-//       ...payload,
-//     })
-
-//     if (payload.status === "Succeeded") {
-//       await OrderRepository.updateOrderDetails(
-//         {
-//           _id: new mongoose.Types.ObjectId(payload.orderId),
-//         },
-//         { $set: { transactionId: transaction._id, paymentStatus: "paid" } },
-//       )
-//     } else {
-//       await OrderRepository.updateOrderDetails(
-//         {
-//           _id: new mongoose.Types.ObjectId(payload.orderId),
-//         },
-//         { $set: { transactionId: transaction._id, paymentStatus: "failed" } },
-//       )
-//     }
-//     return { success: true, msg: transactionMessages.PAYMENT_SUCCESS }
-//   }
-// }
