@@ -1,6 +1,5 @@
 const { mongoose } = require("mongoose")
 const { IResponse } = require("../../constants")
-const { providerMessages } = require("../providers.messages")
 const { stripePaymentIntent } = require("../../utils/stripe")
 
 class StripePaymentService {
@@ -9,12 +8,11 @@ class StripePaymentService {
 
     const stripe = await stripePaymentIntent({ amount, currency })
 
-    if (!stripe)
-      return { success: false, msg: providerMessages.INITIATE_PAYMENT_FAILURE }
+    if (!stripe) return { success: false, msg: `unable to initiate payment` }
 
     return {
       success: true,
-      msg: providerMessages.INITIATE_PAYMENT_SUCCESS,
+      msg: `Payment initiation successful`,
       data: stripe,
     }
   }

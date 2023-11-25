@@ -4,7 +4,6 @@ const { TransactionRepository } = require("./transaction.repository")
 const { InvoiceRepository } = require("../invoice/invoice.repository")
 const { StripePaymentService } = require("../../providers/stripe/stripe")
 const { LIMIT, SKIP, SORT } = require("../../constants")
-const { transactionMessages } = require("./transaction.messages")
 
 class TransactionService {
   static paymentProvider
@@ -30,18 +29,20 @@ class TransactionService {
       currency,
     })
 
-    console.log("transaction details", paymentDetails)
-
     if (!paymentDetails)
       return {
         success: false,
-        msg: transactionMessages.CREATE_TRANSACTION_FAILURE,
+        msg: `unable to create stripe payment details`,
       }
+
+    const paymentId = paymentDetails.data.data
+
+    const { transactionId } = paymentId
 
     const transaction = await TransactionRepository.create({
       amount,
       currency,
-      transactionId: paymentDetails.id,
+      transactionId: transactionId,
       userId: new mongoose.Types.ObjectId(invoice.addedBy),
       paymentFor,
     })
