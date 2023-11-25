@@ -32,10 +32,11 @@ class ClientRepository {
   }
 
   static async updateClientDetails(id, params) {
-    return Client.findOneAndUpdate(
-      { ...id },
-      { ...params } //returns details about the update
-    )
+    return Client.findOneAndUpdate({ ...id }, { ...params }, { new: true })
+  }
+
+  static async deleteClientDetails(id) {
+    return Client.findByIdAndDelete({ ...id })
   }
 }
 

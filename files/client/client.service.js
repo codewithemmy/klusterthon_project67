@@ -48,14 +48,8 @@ class ClientService {
   }
 
   static async updateClientService(body, locals) {
-    const client = await ClientRepository.findSingleClientWithParams({
-      _id: locals._id,
-    })
-
-    if (!client) return { success: false, msg: ClientFailure.UPDATE }
-
     const updateClient = await ClientRepository.updateClientDetails(
-      { _id: locals._id },
+      { _id: new mongoose.Types.ObjectId(locals) },
       {
         ...body,
       }
@@ -64,6 +58,16 @@ class ClientService {
     if (!updateClient) return { success: false, msg: ClientFailure.UPDATE }
 
     return { success: true, msg: ClientSuccess.UPDATE }
+  }
+
+  static async deleteClientService(locals) {
+    const deleteClient = await ClientRepository.deleteClientDetails({
+      _id: new mongoose.Types.ObjectId(locals),
+    })
+
+    if (!deleteClient) return { success: false, msg: ClientFailure.DELETE }
+
+    return { success: true, msg: ClientSuccess.DELETE }
   }
 }
 
