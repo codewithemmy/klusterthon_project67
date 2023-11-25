@@ -2,21 +2,37 @@ const { default: mongoose } = require("mongoose")
 const { queryConstructor, AlphaNumeric } = require("../../utils")
 const { InvoiceSuccess, InvoiceFailure } = require("./invoice.messages")
 const { InvoiceRepository } = require("./invoice.repository")
+const { sendMailNotification } = require("../../utils/email")
 const { LIMIT, SKIP, SORT } = require("../../constants")
 
 class InvoiceService {
   static async createInvoiceService(payload, jwt) {
+    const { email } = payload
     let randomNumber = AlphaNumeric(6, "number")
 
     let invoiceId = `#${randomNumber}`
 
-    const client = await InvoiceRepository.create({
+    const invoice = await InvoiceRepository.create({
       invoiceId,
       addedBy: new mongoose.Types.ObjectId(jwt._id),
       ...payload,
     })
 
-    if (!client) return { success: false, msg: InvoiceFailure.UPDATE }
+    if (!invoice) return { success: false, msg: InvoiceFailure.UPDATE }
+
+    const substitutional_parameters = {
+      url: `${process.env.URL}/invoice/${invoice._id}`,
+      name: payload.billTo,
+      due: payload.paymentDue,
+      price: invoice.totalPrice,
+    }
+
+    await sendMailNotification(
+      email,
+      "Invoice from Klusterthon",
+      substitutional_parameters,
+      "INVOICE"
+    )
 
     return {
       success: true,
