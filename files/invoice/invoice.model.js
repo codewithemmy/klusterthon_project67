@@ -17,12 +17,19 @@ const invoiceSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    issuedOn: {
+      type: Date,
+      required: true,
+    },
     status: {
       type: String,
       enum: ["pending", "paid"],
       default: "pending",
     },
     note: {
+      type: String,
+    },
+    address: {
       type: String,
     },
     totalPrice: {
