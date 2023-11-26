@@ -34,6 +34,7 @@ const invoiceSchema = new mongoose.Schema(
     },
     address: {
       type: String,
+      required: true
     },
     totalPrice: {
       type: Number,
