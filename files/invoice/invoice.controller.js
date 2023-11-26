@@ -51,9 +51,23 @@ const deleteInvoiceController = async (req, res, next) => {
   return responseHandler(res, SUCCESS, data)
 }
 
+
+const recipientInvoiceController = async (req, res, next) => {
+  const [error, data] = await manageAsyncOps(
+    InvoiceService.getInvoiceService(req.query)
+  )
+
+  if (error) return next(error)
+
+  if (!data.success) return next(new CustomError(data.msg, BAD_REQUEST, data))
+
+  return responseHandler(res, SUCCESS, data)
+}
+
+
 module.exports = {
   createInvoiceController,
   getInvoiceController,
   updateInvoiceController,
-  deleteInvoiceController,
+  deleteInvoiceController, recipientInvoiceController
 }
