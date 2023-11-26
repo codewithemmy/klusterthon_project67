@@ -57,7 +57,7 @@ const invoiceSchema = new mongoose.Schema(
 invoiceSchema.pre("save", function (next) {
   // Calculate the sum of prices in the services array
   const calculatedTotalPrice = this.services.reduce(
-    (total, service) => total + service.price,
+    (total, service) => total + service.qty * service.price,
     0
   )
 
