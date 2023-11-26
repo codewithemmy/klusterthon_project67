@@ -8,7 +8,7 @@ const {
   recipientInvoiceController,
 } = require("./invoice.controller")
 
-invoiceRoute.get("/recipient").get(recipientInvoiceController)
+invoiceRoute.use("/recipient").get(recipientInvoiceController)
 invoiceRoute.use(isAuthenticated)
 
 //routes
