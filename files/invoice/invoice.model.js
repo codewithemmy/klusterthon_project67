@@ -13,6 +13,9 @@ const invoiceSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    phone: {
+      type: String,
+    },
     paymentDue: {
       type: Date,
       required: true,
