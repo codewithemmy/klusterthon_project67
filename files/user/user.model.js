@@ -31,6 +31,9 @@ const userSchema = new mongoose.Schema(
     verificationOtp: {
       type: String,
     },
+    stripeCustomerId: {
+      type: String,
+    },
     passwordTokenExpirationDate: {
       type: Date,
     },
