@@ -82,8 +82,8 @@ class TransactionService {
   }
 
   static async transactionAnalysisService(payload) {
-    const transaction = await TransactionRepository.findAllTransactionParams({
-      userId: new mongoose.Types.ObjectId(payload),
+    const transaction = await InvoiceRepository.findAllInvoiceParams({
+      addedBy: new mongoose.Types.ObjectId(payload),
     })
     const pendingTransaction = await InvoiceRepository.findAllInvoiceParams({
       addedBy: new mongoose.Types.ObjectId(payload),
