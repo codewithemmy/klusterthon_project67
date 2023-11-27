@@ -11,6 +11,7 @@ const { UserRepository } = require("../user.repository")
 
 const { LIMIT, SKIP, SORT } = require("../../../constants")
 const { sendMailNotification } = require("../../../utils/email")
+const { getUserProfileController } = require("../controllers/profile.controller")
 
 class UserService {
   static async createUser(payload) {
