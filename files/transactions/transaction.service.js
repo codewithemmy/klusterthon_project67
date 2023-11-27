@@ -125,7 +125,7 @@ class TransactionService {
     if (!invoice)
       return { success: false, msg: `unable to get monthly analysis` }
 
-    return { success: false, msg: `monthly analysis fetched`, data: invoice }
+    return { success: true, msg: `monthly analysis fetched`, data: invoice }
   }
 }
 
