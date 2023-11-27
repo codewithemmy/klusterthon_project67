@@ -1,4 +1,5 @@
 const { Transaction } = require("./transaction.model")
+const { default: mongoose } = require("mongoose")
 
 class TransactionRepository {
   static async create(payload) {
@@ -28,15 +29,12 @@ class TransactionRepository {
   static async findAllTransactionParams(TransactionPayload) {
     const { limit, skip, sort, ...restOfPayload } = TransactionPayload
 
-    const Transaction = await Transaction.find(
-      { ...restOfPayload },
-      { password: 0 }
-    )
+    const transaction = await Transaction.find({ ...restOfPayload })
       .sort(sort)
       .skip(skip)
       .limit(limit)
 
-    return Transaction
+    return transaction
   }
 
   static async updateTransactionDetails(id, params) {

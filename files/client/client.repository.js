@@ -23,7 +23,7 @@ class ClientRepository {
   static async findAllClientParams(clientPayload) {
     const { limit, skip, sort, ...restOfPayload } = clientPayload
 
-    const client = await Client.find({ ...restOfPayload }, { password: 0 })
+    const client = await Client.find({ ...restOfPayload })
       .sort(sort)
       .skip(skip)
       .limit(limit)
@@ -41,5 +41,3 @@ class ClientRepository {
 }
 
 module.exports = { ClientRepository }
-
-

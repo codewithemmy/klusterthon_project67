@@ -2,6 +2,7 @@ const { default: mongoose } = require("mongoose")
 const { queryConstructor, AlphaNumeric } = require("../../utils")
 const { TransactionRepository } = require("./transaction.repository")
 const { InvoiceRepository } = require("../invoice/invoice.repository")
+const { ClientRepository } = require("../client/client.repository")
 const { StripePaymentService } = require("../../providers/stripe/stripe")
 const { LIMIT, SKIP, SORT } = require("../../constants")
 
@@ -78,6 +79,47 @@ class TransactionService {
     )
 
     return { success: true, msg: `Transaction Successfully Verified` }
+  }
+
+  static async transactionAnalysisService(payload) {
+    const transaction = await TransactionRepository.findAllTransactionParams({
+      userId: new mongoose.Types.ObjectId(payload),
+    })
+    const pendingTransaction =
+      await TransactionRepository.findAllTransactionParams({
+        userId: new mongoose.Types.ObjectId(payload),
+        status: "pending",
+      })
+
+    const paidTransaction =
+      await TransactionRepository.findAllTransactionParams({
+        userId: new mongoose.Types.ObjectId(payload),
+        status: "Succeeded",
+      })
+
+    const client = await ClientRepository.findAllClientParams({
+      addedBy: new mongoose.Types.ObjectId(payload),
+    })
+
+    if (!transaction || !paidTransaction || !pendingTransaction)
+      return { success: false, msg: `unable to find transaction`, data: [] }
+
+    // Use reduce to calculate the total amount
+    const totalAmount = transaction.reduce(
+      (acc, transaction) => acc + transaction.amount,
+      0
+    )
+
+    return {
+      success: true,
+      msg: `Successfully Fetched`,
+      data: {
+        totalAmount,
+        pending: pendingTransaction.length,
+        paid: paidTransaction.length,
+        client: client.length,
+      },
+    }
   }
 }
 
