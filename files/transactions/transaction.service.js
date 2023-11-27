@@ -103,7 +103,7 @@ class TransactionService {
 
     // Use reduce to calculate the total amount
     const totalAmount = transaction.reduce(
-      (acc, transaction) => acc + transaction.amount,
+      (acc, transaction) => acc + transaction.totalPrice,
       0
     )
 
