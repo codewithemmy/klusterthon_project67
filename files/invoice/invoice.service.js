@@ -49,10 +49,11 @@ class InvoiceService {
     if (error) return { success: false, msg: error }
 
     let user
-    if (user) {
+    if (jwt) {
       user = { addedBy: new mongoose.Types.ObjectId(jwt) }
     }
 
+    console.log("jwt", user)
     const invoice = await InvoiceRepository.findAllInvoiceParams({
       ...params,
       limit,

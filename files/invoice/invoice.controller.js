@@ -20,6 +20,7 @@ const getInvoiceController = async (req, res, next) => {
     InvoiceService.getInvoiceService(req.query, res.locals.jwt._id)
   )
 
+  console.log("locals", res.locals.jwt)
   if (error) return next(error)
 
   if (!data.success) return next(new CustomError(data.msg, BAD_REQUEST, data))
@@ -51,7 +52,6 @@ const deleteInvoiceController = async (req, res, next) => {
   return responseHandler(res, SUCCESS, data)
 }
 
-
 const recipientInvoiceController = async (req, res, next) => {
   const [error, data] = await manageAsyncOps(
     InvoiceService.getInvoiceService(req.query)
@@ -64,10 +64,10 @@ const recipientInvoiceController = async (req, res, next) => {
   return responseHandler(res, SUCCESS, data)
 }
 
-
 module.exports = {
   createInvoiceController,
   getInvoiceController,
   updateInvoiceController,
-  deleteInvoiceController, recipientInvoiceController
+  deleteInvoiceController,
+  recipientInvoiceController,
 }
