@@ -118,6 +118,15 @@ class TransactionService {
       },
     }
   }
+
+  static async monthlyTransactionAnalysis(payload) {
+    const invoice = await InvoiceRepository.monthlyInvoiceAnalysis(payload)
+
+    if (!invoice)
+      return { success: false, msg: `unable to get monthly analysis` }
+
+    return { success: false, msg: `monthly analysis fetched`, data: invoice }
+  }
 }
 
 module.exports = { TransactionService }

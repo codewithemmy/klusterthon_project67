@@ -31,7 +31,19 @@ const transactionAnalysisController = async (req, res, next) => {
   const [error, data] = await manageAsyncOps(
     TransactionService.transactionAnalysisService(res.locals.jwt._id)
   )
-  console.log("error", error)
+
+  if (error) return next(error)
+
+  if (!data.success) return next(new CustomError(data.msg, BAD_REQUEST, data))
+
+  return responseHandler(res, SUCCESS, data)
+}
+
+const monthlyAnalysisController = async (req, res, next) => {
+  const [error, data] = await manageAsyncOps(
+    TransactionService.monthlyTransactionAnalysis(res.locals.jwt._id)
+  )
+
   if (error) return next(error)
 
   if (!data.success) return next(new CustomError(data.msg, BAD_REQUEST, data))
@@ -43,4 +55,5 @@ module.exports = {
   initiatePaymentController,
   verifyPaymentController,
   transactionAnalysisController,
+  monthlyAnalysisController,
 }

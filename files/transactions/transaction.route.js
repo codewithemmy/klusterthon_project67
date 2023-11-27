@@ -4,6 +4,7 @@ const {
   initiatePaymentController,
   verifyPaymentController,
   transactionAnalysisController,
+  monthlyAnalysisController,
 } = require("./transaction.controller")
 
 //routes
@@ -13,5 +14,6 @@ transactionRoute.route("/verify").post(verifyPaymentController)
 transactionRoute.use(isAuthenticated)
 
 transactionRoute.route("/analysis").get(transactionAnalysisController)
+transactionRoute.route("/analysis/monthly").get(monthlyAnalysisController)
 
 module.exports = transactionRoute

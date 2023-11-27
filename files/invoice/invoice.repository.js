@@ -38,6 +38,45 @@ class InvoiceRepository {
   static async deleteInvoiceDetails(id) {
     return Invoice.findByIdAndDelete({ ...id })
   }
+
+  static async monthlyInvoiceAnalysis(id) {
+    const monthlyTotals = await Invoice.aggregate([
+      {
+        $match: {
+          status: "paid",
+          addedBy: new mongoose.Types.ObjectId(id),
+        },
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$updatedAt" },
+            month: { $month: "$updatedAt" },
+          },
+          total: { $sum: "$totalPrice" },
+        },
+      },
+      {
+        $project: {
+          _id: 0, // Exclude default _id field
+          monthYear: {
+            $dateToString: {
+              format: "%Y-%m",
+              date: {
+                $dateFromParts: {
+                  year: "$_id.year",
+                  month: "$_id.month",
+                  day: 1,
+                },
+              },
+            },
+          },
+          total: 1,
+        },
+      },
+    ])
+    return monthlyTotals
+  }
 }
 
 module.exports = { InvoiceRepository }

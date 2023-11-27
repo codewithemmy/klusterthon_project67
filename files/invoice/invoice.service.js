@@ -53,7 +53,6 @@ class InvoiceService {
       user = { addedBy: new mongoose.Types.ObjectId(jwt) }
     }
 
-    console.log("jwt", user)
     const invoice = await InvoiceRepository.findAllInvoiceParams({
       ...params,
       limit,
