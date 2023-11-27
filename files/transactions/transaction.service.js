@@ -85,18 +85,15 @@ class TransactionService {
     const transaction = await TransactionRepository.findAllTransactionParams({
       userId: new mongoose.Types.ObjectId(payload),
     })
-    const pendingTransaction =
-      await TransactionRepository.findAllTransactionParams({
-        userId: new mongoose.Types.ObjectId(payload),
-        status: "pending",
-      })
+    const pendingTransaction = await InvoiceRepository.findAllInvoiceParams({
+      addedBy: new mongoose.Types.ObjectId(payload),
+      status: "pending",
+    })
 
-    const paidTransaction =
-      await TransactionRepository.findAllTransactionParams({
-        userId: new mongoose.Types.ObjectId(payload),
-        status: "Succeeded",
-      })
-
+    const paidTransaction = await InvoiceRepository.findAllInvoiceParams({
+      addedBy: new mongoose.Types.ObjectId(payload),
+      status: "paid",
+    })
     const client = await ClientRepository.findAllClientParams({
       addedBy: new mongoose.Types.ObjectId(payload),
     })
