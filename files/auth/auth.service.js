@@ -30,6 +30,17 @@ class AuthService {
     confirmOtp.verified = Date.now()
     await confirmOtp.save()
 
+    const substitutional_parameters = {
+      name: confirmOtp.firstName,
+    }
+
+    await sendMailNotification(
+      email,
+      "Email Verified",
+      substitutional_parameters,
+      "VERIFIED"
+    )
+
     return {
       success: true,
       msg: AuthSuccess.VERIFY_OTP,
