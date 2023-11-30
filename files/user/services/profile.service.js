@@ -116,13 +116,17 @@ class ProfileService {
     user.password = await hashPassword(newPassword)
     const updateUser = await user.save()
 
-    if (!updateUser) return { success: false, msg: UserFailure.UPDATE }
+    if (!updateUser)
+      return { success: false, msg: UserFailure.UPDATE, data: null }
 
     return { success: true, msg: UserSuccess.UPDATE }
   }
 
   static async getUserProfileService(payload) {
- 
+    const { _id } = payload
+
+    if (_id === 0) return { success: true, msg: UserFailure.FETCH, data: [] }
+
     const user = await UserRepository.findSingleUserWithParams(
       {
         ...payload,
