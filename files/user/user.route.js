@@ -22,6 +22,4 @@ userRoute
 
 userRoute.route("/").get(getUserProfileController)
 
-userRoute.use(isAuthenticated)
-
 module.exports = userRoute
