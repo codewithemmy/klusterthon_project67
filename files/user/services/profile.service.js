@@ -126,9 +126,8 @@ class ProfileService {
     const { _id } = payload
 
     if (_id === "0" || _id === undefined)
-      return { success: true, msg: UserFailure.FETCH, data: [] }
+      return null
 
-    console.log("payload", payload)
 
     const user = await UserRepository.findSingleUserWithParams(
       {
