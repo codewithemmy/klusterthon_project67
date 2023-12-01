@@ -117,7 +117,7 @@ class ProfileService {
     const updateUser = await user.save()
 
     if (!updateUser)
-      return { success: false, msg: UserFailure.UPDATE, data: null }
+      return { success: false, msg: UserFailure.UPDATE, data: [] }
 
     return { success: true, msg: UserSuccess.UPDATE }
   }
