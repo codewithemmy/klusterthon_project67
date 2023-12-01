@@ -21,7 +21,7 @@ class InvoiceService {
     if (!invoice) return { success: false, msg: InvoiceFailure.UPDATE }
 
     const substitutional_parameters = {
-      url: `${process.env.URL}/invoices/view/${invoice._id}`,
+      url: `${process.env.URL}/invoice/view/${invoice._id}`,
       name: payload.billTo,
       due: payload.paymentDue,
       price: invoice.totalPrice,
